@@ -45,9 +45,10 @@ Likely technologies:
 
 Passwords must be hashed. Additional encryption is not required for the password itself.
 
-## 2. Organizations
+## 2. Organizations and subscriptions
 
-An organization is the tenant boundary.
+Organizations and subscriptions define the tenant boundary and the SaaS account
+using NexusCRM.
 
 Example:
 
@@ -61,12 +62,18 @@ Status: Active
 Initial entities:
 
 - Organization.
-- OrganizationUser.
+- Subscription.
+- Plan.
 - User.
 - Role.
-- Permission.
+- OrganizationUser.
+- UserInvitation.
 
-A user can belong to one or more organizations. Every organization-scoped feature must use the current organization context.
+A user can belong to one or more organizations. Every organization-scoped
+feature must use the current organization context.
+
+See [Organizations and subscriptions module](organizations-and-subscriptions.md)
+for the first module scope.
 
 ## 3. Users and permissions
 
