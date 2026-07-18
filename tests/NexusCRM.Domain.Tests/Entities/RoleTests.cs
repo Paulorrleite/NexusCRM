@@ -1,6 +1,6 @@
 using NexusCRM.Domain.Organizations;
 
-namespace NexusCRM.Domain.Tests.Organizations;
+namespace NexusCRM.Domain.Tests.Entities;
 
 public sealed class RoleTests
 {
