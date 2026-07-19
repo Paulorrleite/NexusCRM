@@ -16,16 +16,9 @@ public sealed class PlanController(ISender sender) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType<IReadOnlyCollection<PlanListItem>>(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IReadOnlyCollection<PlanListItem>>> ListAsync(
-        [FromQuery] string? name,
-        [FromQuery] string? description,
-        [FromQuery] BillingPeriod? billingPeriod,
-        [FromQuery] bool? isActive,
-        CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyCollection<PlanListItem>>> ListAsync(ListPlansQuery query)
     {
-        var result = await sender.Send(
-            new ListPlansQuery(name, description, billingPeriod, isActive),
-            cancellationToken);
+        var result = await sender.Send(query);
 
         return Ok(result);
     }
@@ -33,13 +26,11 @@ public sealed class PlanController(ISender sender) : ControllerBase
     [HttpPost]
     [ProducesResponseType<RegisterPlanResult>(StatusCodes.Status201Created)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<RegisterPlanResult>> RegisterAsync(
-        [FromBody] RegisterPlanCommand command,
-        CancellationToken cancellationToken)
+    public async Task<ActionResult<RegisterPlanResult>> RegisterAsync([FromBody] RegisterPlanCommand command)
     {
         try
         {
-            var result = await sender.Send(command, cancellationToken);
+            var result = await sender.Send(command);
 
             return Created($"/api/plans/{result.PlanId}", result);
         }
@@ -54,16 +45,11 @@ public sealed class PlanController(ISender sender) : ControllerBase
     [ProducesResponseType<EditPlanResult>(StatusCodes.Status409Conflict)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> EditAsync(
-        Guid planId,
-        [FromBody] EditPlanCommand command,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> EditAsync([FromBody] EditPlanCommand command)
     {
         try
         {
-            var result = await sender.Send(
-                command with { PlanId = planId },
-                cancellationToken);
+            var result = await sender.Send(command);
 
             return result.Updated ? NoContent() : Conflict(result);
         }
@@ -77,15 +63,11 @@ public sealed class PlanController(ISender sender) : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<DeletePlanResult>(StatusCodes.Status409Conflict)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteAsync(
-        Guid planId,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteAsync(DeletePlanCommand command)
     {
         try
         {
-            var result = await sender.Send(
-                new DeletePlanCommand(planId),
-                cancellationToken);
+            var result = await sender.Send(command);
 
             return result.Deleted ? NoContent() : Conflict(result);
         }
