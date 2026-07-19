@@ -1,3 +1,4 @@
+using FluentValidation;
 using NexusCRM.Application;
 using NexusCRM.Infrastructure;
 
@@ -16,6 +17,24 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next(context);
+    }
+    catch (ValidationException exception)
+    {
+        var errors = exception.Errors
+            .GroupBy(error => error.PropertyName)
+            .ToDictionary(
+                group => group.Key,
+                group => group.Select(error => error.ErrorMessage).ToArray());
+
+        await Results.ValidationProblem(errors).ExecuteAsync(context);
+    }
+});
 
 app.UseAuthorization();
 
