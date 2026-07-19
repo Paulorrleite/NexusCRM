@@ -15,7 +15,6 @@ namespace NexusCRM.API.Features.Plans;
 public sealed class PlanController(ISender sender) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType<IReadOnlyCollection<PlanListItem>>(StatusCodes.Status200OK)]
     public async Task<ActionResult<IReadOnlyCollection<PlanListItem>>> ListAsync(ListPlansQuery query)
     {
         var result = await sender.Send(query);
@@ -24,8 +23,6 @@ public sealed class PlanController(ISender sender) : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType<RegisterPlanResult>(StatusCodes.Status201Created)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<RegisterPlanResult>> RegisterAsync([FromBody] RegisterPlanCommand command)
     {
         try
@@ -41,10 +38,6 @@ public sealed class PlanController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{planId:guid}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType<EditPlanResult>(StatusCodes.Status409Conflict)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> EditAsync([FromBody] EditPlanCommand command)
     {
         try
@@ -60,9 +53,6 @@ public sealed class PlanController(ISender sender) : ControllerBase
     }
 
     [HttpDelete("{planId:guid}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType<DeletePlanResult>(StatusCodes.Status409Conflict)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteAsync(DeletePlanCommand command)
     {
         try
