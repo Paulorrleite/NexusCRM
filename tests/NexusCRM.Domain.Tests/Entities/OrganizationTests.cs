@@ -9,7 +9,7 @@ public sealed class OrganizationTests
     {
         var createdAt = DateTimeOffset.UtcNow;
 
-        var organization = Organization.Register(" Reus Tecnologia ", " reus-tecnologia ", createdAt);
+        var organization = Organization.Register(" Reus Tecnologia ", createdAt);
 
         Assert.NotEqual(Guid.Empty, organization.Id);
         Assert.Equal("Reus Tecnologia", organization.Name);
@@ -22,7 +22,7 @@ public sealed class OrganizationTests
     [Fact]
     public void Rename_rejects_cancelled_organization()
     {
-        var organization = Organization.Register("Reus Tecnologia", "reus-tecnologia", DateTimeOffset.UtcNow);
+        var organization = Organization.Register("Reus Tecnologia", DateTimeOffset.UtcNow);
         organization.Cancel(DateTimeOffset.UtcNow);
 
         Assert.Throws<DomainException>(() => organization.Rename("New name", DateTimeOffset.UtcNow));
@@ -31,7 +31,7 @@ public sealed class OrganizationTests
     [Fact]
     public void Suspend_changes_status_to_suspended()
     {
-        var organization = Organization.Register("Reus Tecnologia", "reus-tecnologia", DateTimeOffset.UtcNow);
+        var organization = Organization.Register("Reus Tecnologia", DateTimeOffset.UtcNow);
         var updatedAt = DateTimeOffset.UtcNow.AddMinutes(1);
 
         organization.Suspend(updatedAt);
@@ -44,7 +44,7 @@ public sealed class OrganizationTests
     [Fact]
     public void Suspend_rejects_cancelled_organization()
     {
-        var organization = Organization.Register("Reus Tecnologia", "reus-tecnologia", DateTimeOffset.UtcNow);
+        var organization = Organization.Register("Reus Tecnologia", DateTimeOffset.UtcNow);
         organization.Cancel(DateTimeOffset.UtcNow);
 
         Assert.Throws<DomainException>(() => organization.Suspend(DateTimeOffset.UtcNow));
@@ -53,7 +53,7 @@ public sealed class OrganizationTests
     [Fact]
     public void Activate_changes_status_to_active()
     {
-        var organization = Organization.Register("Reus Tecnologia", "reus-tecnologia", DateTimeOffset.UtcNow);
+        var organization = Organization.Register("Reus Tecnologia", DateTimeOffset.UtcNow);
         organization.Suspend(DateTimeOffset.UtcNow.AddMinutes(1));
         var updatedAt = DateTimeOffset.UtcNow.AddMinutes(2);
 
@@ -67,9 +67,39 @@ public sealed class OrganizationTests
     [Fact]
     public void Activate_rejects_cancelled_organization()
     {
-        var organization = Organization.Register("Reus Tecnologia", "reus-tecnologia", DateTimeOffset.UtcNow);
+        var organization = Organization.Register("Reus Tecnologia", DateTimeOffset.UtcNow);
         organization.Cancel(DateTimeOffset.UtcNow);
 
         Assert.Throws<DomainException>(() => organization.Activate(DateTimeOffset.UtcNow));
+    }
+
+    [Theory]
+    [InlineData("Reus Tecnologia", "reus-tecnologia")]
+    [InlineData("  Reus   Tecnologia  ", "reus-tecnologia")]
+    [InlineData("Reus Tecnologia CRM", "reus-tecnologia-crm")]
+    [InlineData("Sao Paulo CRM", "sao-paulo-crm")]
+    [InlineData("Nexus_CRM!", "nexus-crm")]
+    public void GenerateSlug_creates_url_friendly_slug(string name, string expectedSlug)
+    {
+        var slug = Organization.GenerateSlug(name);
+
+        Assert.Equal(expectedSlug, slug);
+    }
+
+    [Fact]
+    public void Register_appends_slug_suffix_when_provided()
+    {
+        var organization = Organization.Register(
+            "Reus Tecnologia",
+            DateTimeOffset.UtcNow,
+            slugSuffix: 1);
+
+        Assert.Equal("reus-tecnologia-2", organization.Slug);
+    }
+
+    [Fact]
+    public void GenerateSlug_rejects_name_without_letters_or_numbers()
+    {
+        Assert.Throws<DomainException>(() => Organization.GenerateSlug("---"));
     }
 }

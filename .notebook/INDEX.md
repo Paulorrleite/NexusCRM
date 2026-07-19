@@ -2,6 +2,8 @@
 
 ## Project structure
 
+- [Organization CQRS slice](organization-cqrs-slice.md): organization
+  commands, queries, persistence contracts, and API endpoint pattern.
 - [Application validation](application-validation.md): FluentValidation
   validators and MediatR validation pipeline for CQRS requests.
 - [Project structure](project-structure.md): current Web API project layout,

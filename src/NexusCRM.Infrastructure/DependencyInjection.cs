@@ -25,6 +25,8 @@ public static class DependencyInjection
 
         services.AddScoped<IPlanRepository, PlanRepository>();
         services.AddScoped<IPlanQueries, PlanQueries>();
+        services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+        services.AddScoped<IOrganizationQueries, OrganizationQueries>();
         services.AddScoped<IUnitOfWork>(serviceProvider =>
             serviceProvider.GetRequiredService<NexusCrmDbContext>());
 
