@@ -2,7 +2,7 @@ using NexusCRM.Domain;
 
 namespace NexusCRM.Domain.Organizations;
 
-public sealed class Plan
+public sealed class Plan : Entity<Guid>
 {
     private readonly HashSet<string> _enabledFeatures;
 
@@ -15,8 +15,8 @@ public sealed class Plan
         PlanLimits limits,
         IEnumerable<string> enabledFeatures,
         bool isActive)
+        : base(id)
     {
-        Id = id;
         Name = name;
         Description = description;
         Price = price;
@@ -28,8 +28,6 @@ public sealed class Plan
             .Where(feature => feature.Length > 0)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
     }
-
-    public Guid Id { get; }
 
     public string Name { get; private set; }
 

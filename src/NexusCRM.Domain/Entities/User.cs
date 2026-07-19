@@ -2,7 +2,7 @@ using NexusCRM.Domain;
 
 namespace NexusCRM.Domain.Organizations;
 
-public sealed class User
+public sealed class User : Entity<Guid>
 {
     private User(
         Guid id,
@@ -12,8 +12,8 @@ public sealed class User
         UserStatus status,
         DateTimeOffset createdAt,
         DateTimeOffset updatedAt)
+        : base(id)
     {
-        Id = id;
         Email = email;
         Name = name;
         PasswordHash = passwordHash;
@@ -21,8 +21,6 @@ public sealed class User
         CreatedAt = createdAt;
         UpdatedAt = updatedAt;
     }
-
-    public Guid Id { get; }
 
     public string Email { get; }
 

@@ -6,6 +6,8 @@
     <Project Path="src/NexusCRM.Infrastructure/NexusCRM.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/NexusCRM.Application.Tests/NexusCRM.Application.Tests.csproj" />
     <Project Path="tests/NexusCRM.Domain.Tests/NexusCRM.Domain.Tests.csproj" />
+    <Project Path="tests/NexusCRM.IntegrationTests/NexusCRM.IntegrationTests.csproj" />
   </Folder>
 </Solution>

@@ -2,7 +2,7 @@ using NexusCRM.Domain;
 
 namespace NexusCRM.Domain.Organizations;
 
-public sealed class Subscription
+public sealed class Subscription : Entity<Guid>
 {
     private Subscription(
         Guid id,
@@ -13,8 +13,8 @@ public sealed class Subscription
         DateTimeOffset currentPeriodStart,
         DateTimeOffset currentPeriodEnd,
         DateTimeOffset? cancelledAt)
+        : base(id)
     {
-        Id = id;
         OrganizationId = organizationId;
         PlanId = planId;
         Status = status;
@@ -23,8 +23,6 @@ public sealed class Subscription
         CurrentPeriodEnd = currentPeriodEnd;
         CancelledAt = cancelledAt;
     }
-
-    public Guid Id { get; }
 
     public Guid OrganizationId { get; }
 

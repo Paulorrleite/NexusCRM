@@ -2,7 +2,7 @@ using NexusCRM.Domain;
 
 namespace NexusCRM.Domain.Organizations;
 
-public sealed class Role
+public sealed class Role : Entity<Guid>
 {
     private readonly HashSet<string> _permissions;
 
@@ -12,8 +12,8 @@ public sealed class Role
         string name,
         SystemRole? systemRole,
         IEnumerable<string> permissions)
+        : base(id)
     {
-        Id = id;
         OrganizationId = organizationId;
         Name = name;
         SystemRole = systemRole;
@@ -22,8 +22,6 @@ public sealed class Role
             .Where(permission => permission.Length > 0)
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
     }
-
-    public Guid Id { get; }
 
     public Guid OrganizationId { get; }
 

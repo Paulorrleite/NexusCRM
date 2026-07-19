@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>nexuscrm-api-9bdc4e24-6b1f-4a92-a7dd-8a5fe59f2a8d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

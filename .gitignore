@@ -233,6 +233,13 @@ _pkginfo.txt
 ClientBin/
 ~$*
 *~
+*.backup
+*.dump
+*.pgdump
+*.sql
+.env
+.env.*
+!.env.example
 *.dbmdl
 *.dbproj.schemaview
 *.jfm

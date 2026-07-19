@@ -2,7 +2,7 @@ using NexusCRM.Domain;
 
 namespace NexusCRM.Domain.Organizations;
 
-public sealed class UserInvitation
+public sealed class UserInvitation : Entity<Guid>
 {
     private UserInvitation(
         Guid id,
@@ -15,8 +15,8 @@ public sealed class UserInvitation
         DateTimeOffset expiresAt,
         DateTimeOffset? acceptedAt,
         DateTimeOffset createdAt)
+        : base(id)
     {
-        Id = id;
         OrganizationId = organizationId;
         Email = email;
         RoleId = roleId;
@@ -27,8 +27,6 @@ public sealed class UserInvitation
         AcceptedAt = acceptedAt;
         CreatedAt = createdAt;
     }
-
-    public Guid Id { get; }
 
     public Guid OrganizationId { get; }
 

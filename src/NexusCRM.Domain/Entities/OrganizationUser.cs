@@ -2,7 +2,7 @@ using NexusCRM.Domain;
 
 namespace NexusCRM.Domain.Organizations;
 
-public sealed class OrganizationUser
+public sealed class OrganizationUser : Entity<Guid>
 {
     private OrganizationUser(
         Guid id,
@@ -11,16 +11,14 @@ public sealed class OrganizationUser
         Guid roleId,
         OrganizationUserStatus status,
         DateTimeOffset joinedAt)
+        : base(id)
     {
-        Id = id;
         OrganizationId = organizationId;
         UserId = userId;
         RoleId = roleId;
         Status = status;
         JoinedAt = joinedAt;
     }
-
-    public Guid Id { get; }
 
     public Guid OrganizationId { get; }
 
